@@ -358,10 +358,17 @@ def _call_recommend(provider: str, prompt: str) -> RecommendResult:
         return _parse_recommend_response(text, provider, model_name, tokens)
 
     except Exception as e:
+        msg = str(e)
+        if "429" in msg or "RESOURCE_EXHAUSTED" in msg or "quota" in msg.lower():
+            msg = "API 무료 한도 초과. 내일 다시 시도하거나 결제 설정을 활성화하세요."
+        elif "503" in msg or "UNAVAILABLE" in msg:
+            msg = "AI 서버 일시 과부하. 잠시 후 다시 시도해주세요."
+        elif "401" in msg or "403" in msg or "invalid" in msg.lower():
+            msg = "API 키가 올바르지 않습니다. Railway Variables를 확인해주세요."
         return RecommendResult(
             provider=provider, model="", ingredients=[], ph_target="",
             viscosity_target="", process_notes="", rationale="",
-            tokens_used=0, error=str(e),
+            tokens_used=0, error=msg,
         )
 
 

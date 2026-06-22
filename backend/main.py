@@ -147,7 +147,7 @@ def _call_openai(prompt: str) -> tuple[str, str, int]:
 def _call_gemini(prompt: str) -> tuple[str, str, int]:
     from google import genai
     client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
-    model_name = "gemini-2.5-flash"
+    model_name = "gemini-2.0-flash"
     system = "당신은 화학 처방 전문가입니다. 세정제, 코팅제, 제거제 등 산업용 화학 제품 처방 개발을 도와주세요."
     from google.genai import types as gtypes
     resp = client.models.generate_content(
@@ -340,7 +340,7 @@ def _call_recommend(provider: str, prompt: str) -> RecommendResult:
             from google import genai as ggenai
             from google.genai import types as gtypes
             gclient = ggenai.Client(api_key=os.getenv("GEMINI_API_KEY"))
-            model_name = "gemini-2.5-flash"
+            model_name = "gemini-2.0-flash"
             resp = gclient.models.generate_content(
                 model=model_name,
                 contents=prompt,
